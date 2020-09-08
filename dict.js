@@ -1,23 +1,16 @@
 const axios = require('axios');
 const readline = require('readline');
-const env=require('./environmentvariables')
-const args=process.argv;
-const apirequest=(key, word) => {
+
+const env = require('./config/env')
+
+const args = process.argv;
+
+const apiReq = (key, word) => {
     return axios.get(env.host+'word/'+word+`/${key}?api_key=`+env.api_key);
 }
-const apiReqAsync = (key, word) => {
-    return new Promise((resolve, reject) => {
-        axios.get(env.host+'word/'+word+`/${key}?api_key=`+env.api_key)
-            .then(data=> {
-                resolve(data)
-            })
-            .catch(err => {
-                reject(err);
-            })
-        })
-}
 
-const nextpermutations= (word) => {
+
+const nextPermut = (word) => {
     if (word.length < 2) 
         return word;
     let permutations = [];
@@ -26,21 +19,22 @@ const nextpermutations= (word) => {
         if (word.indexOf(char) != i)
             continue;
         const remainingString = word.slice(0,i) + word.slice(i+1, word.length);
-        for (let subPermutation of nextpermutations(remainingString))
+        for (let subPermutation of nextPermut(remainingString))
             permutations.push(char + subPermutation)
     }
     return permutations;
 }
+
 const All = (word) => {
-    apirequest('definitions',word)
+    apiReq('definitions',word)
         .then(res =>{
             console.log(`The definitions for the word ${word} are`)
-            console.log(definition(res.data));
+            console.log(definitionArray(res.data));
         })
         .catch(err=> {
             console.log("Sorry Word not found in dictionary")
         })
-    apirequest('relatedWords',word)
+    apiReq('relatedWords',word)
         .then(res =>{
             if(res.data.length > 1) {
                 console.log(`The synonyms for ${word} are`)
@@ -53,7 +47,7 @@ const All = (word) => {
         .catch(err=> {
             console.log("Sorry Word not found in dictionary")
         })
-        apirequest('relatedWords',word)
+        apiReq('relatedWords',word)
             .then(res =>{
                 if(res.data.length > 1) {
                     console.log(`The antonyms for ${word} are`)
@@ -66,19 +60,18 @@ const All = (word) => {
                 console.log("Sorry Word not found in dictionary")
             })
 
-            apirequest('examples',word)
+            apiReq('examples',word)
             .then(res =>{
                 console.log(`The examples for the word ${word} are`)
-                console.log(definition(res.data.examples))
+                console.log(definitionArray(res.data.examples))
             })
             .catch(err=> {
                 console.log("Sorry Word not found in dictionary")
             })
 }
 
-
-let definition=(def) => {
-    let arr=[];
+let definitionArray = (def) => {
+    let arr = [];
     for(let i of def) {
         arr.push(i.text);
     }
@@ -86,60 +79,60 @@ let definition=(def) => {
 }
 
 
-
 switch(args[2]) {
     case 'def':
-        apirequest('definitions',args[3])
+        apiReq('definitions',args[3])
             .then(res =>{
-                console.log(`Definitions of the word ${args[3]} are`)
-                console.log(definition(res.data));
+                console.log(`The definitions for the word ${args[3]} are`)
+                console.log(definitionArray(res.data));
             })
             .catch(err=> {
-                console.log("The word you entered was not found in the dictionary")
+                console.log("Sorry Word not found in dictionary")
             })
         break;
     case 'syn':
-        apirequest('similarWords',args[3])
+        apiReq('relatedWords',args[3])
             .then(res =>{
                 if(res.data.length > 1) {
-                    console.log(`The synonyms of  ${args[3]} are`)
+                    console.log(`The synonyms for ${args[3]} are`)
                     console.log(JSON.stringify(res.data[1].words));
                 } else {
-                    console.log(`The synonyms of ${args[3]} are`)
+                    console.log(`The synonyms for ${args[3]} are`)
                     console.log(JSON.stringify(res.data[0].words))
                 }
             })
             .catch(err=> {
-                console.log("The word you entered was not found in the dictionary")
+                console.log("Sorry Word not found in dictionary")
             })
         break;
     case 'ant':
-        apirequest('similarWords',args[3])
+        apiReq('relatedWords',args[3])
             .then(res =>{
                 if(res.data.length > 1) {
-                    console.log(`The antonyms of ${args[3]} are`)
+                    console.log(`The antonyms for ${args[3]} are`)
                     console.log(JSON.stringify(res.data[0].words));
                 } else {
-                    console.log("Sorry We cannot find Antonym of the word in dictionary")
+                    console.log("Sorry We cannot find Antonym for the word in dictionary")
                 }
             })
             .catch(err=> {
-                console.log("The word you entered was not found in the dictionary")
+                console.log("Sorry Word not found in dictionary")
             })
         break;
     case 'ex':
-        apirequest('examples',args[3])
+        apiReq('examples',args[3])
             .then(res =>{
                 console.log(`The examples for the word ${args[3]} are`)
-                console.log(definition(res.data.examples))
+                console.log(definitionArray(res.data.examples))
             })
             .catch(err=> {
-                console.log("The word you entered was not found in the dictionary")
+                console.log("Sorry Word not found in dictionary")
             })
         break;
     case 'dict':
         All(args[3]);
         break;
+     
     case undefined:
         axios.get(env.host+'words/randomWord?api_key='+env.api_key)
             .then(res =>{
@@ -150,5 +143,5 @@ switch(args[2]) {
             })
         break;
     default:
-        All(args[2])
+        All(args[2])   
 }
