@@ -1,16 +1,16 @@
 const axios = require('axios');
 const readline = require('readline');
 
-const env = require('./config/env')
+const env = require('./environmentvariables')
 
 const args = process.argv;
 
-const apiReq = (key, word) => {
+const apiRequest = (key, word) => {
     return axios.get(env.host+'word/'+word+`/${key}?api_key=`+env.api_key);
 }
 
 
-const nextPermut = (word) => {
+const nextPermututations = (word) => {
     if (word.length < 2) 
         return word;
     let permutations = [];
@@ -19,22 +19,22 @@ const nextPermut = (word) => {
         if (word.indexOf(char) != i)
             continue;
         const remainingString = word.slice(0,i) + word.slice(i+1, word.length);
-        for (let subPermutation of nextPermut(remainingString))
+        for (let subPermutation of nextPermututations(remainingString))
             permutations.push(char + subPermutation)
     }
     return permutations;
 }
 
 const All = (word) => {
-    apiReq('definitions',word)
+    apiRequest('definitions',word)
         .then(res =>{
             console.log(`The definitions for the word ${word} are`)
-            console.log(definitionArray(res.data));
+            console.log(definition(res.data));
         })
         .catch(err=> {
             console.log("Sorry Word not found in dictionary")
         })
-    apiReq('relatedWords',word)
+    apiRequest('relatedWords',word)
         .then(res =>{
             if(res.data.length > 1) {
                 console.log(`The synonyms for ${word} are`)
@@ -47,7 +47,7 @@ const All = (word) => {
         .catch(err=> {
             console.log("Sorry Word not found in dictionary")
         })
-        apiReq('relatedWords',word)
+        apiRequest('relatedWords',word)
             .then(res =>{
                 if(res.data.length > 1) {
                     console.log(`The antonyms for ${word} are`)
@@ -60,17 +60,17 @@ const All = (word) => {
                 console.log("Sorry Word not found in dictionary")
             })
 
-            apiReq('examples',word)
+            apiRequest('examples',word)
             .then(res =>{
                 console.log(`The examples for the word ${word} are`)
-                console.log(definitionArray(res.data.examples))
+                console.log(definition(res.data.examples))
             })
             .catch(err=> {
                 console.log("Sorry Word not found in dictionary")
             })
 }
 
-let definitionArray = (def) => {
+let definition = (def) => {
     let arr = [];
     for(let i of def) {
         arr.push(i.text);
@@ -81,17 +81,17 @@ let definitionArray = (def) => {
 
 switch(args[2]) {
     case 'def':
-        apiReq('definitions',args[3])
+        apiRequest('definitions',args[3])
             .then(res =>{
                 console.log(`The definitions for the word ${args[3]} are`)
-                console.log(definitionArray(res.data));
+                console.log(definition(res.data));
             })
             .catch(err=> {
                 console.log("Sorry Word not found in dictionary")
             })
         break;
     case 'syn':
-        apiReq('relatedWords',args[3])
+        apiRequest('relatedWords',args[3])
             .then(res =>{
                 if(res.data.length > 1) {
                     console.log(`The synonyms for ${args[3]} are`)
@@ -106,7 +106,7 @@ switch(args[2]) {
             })
         break;
     case 'ant':
-        apiReq('relatedWords',args[3])
+        apiRequest('relatedWords',args[3])
             .then(res =>{
                 if(res.data.length > 1) {
                     console.log(`The antonyms for ${args[3]} are`)
@@ -120,10 +120,10 @@ switch(args[2]) {
             })
         break;
     case 'ex':
-        apiReq('examples',args[3])
+        apiRequest('examples',args[3])
             .then(res =>{
                 console.log(`The examples for the word ${args[3]} are`)
-                console.log(definitionArray(res.data.examples))
+                console.log(definition(res.data.examples))
             })
             .catch(err=> {
                 console.log("Sorry Word not found in dictionary")
