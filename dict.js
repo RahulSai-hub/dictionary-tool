@@ -30,6 +30,51 @@ const nextpermutations= (word) => {
             permutations.push(char + subPermutation)
     }
     return permutations;
+}
+const All = (word) => {
+    apirequest('definitions',word)
+        .then(res =>{
+            console.log(`The definitions for the word ${word} are`)
+            console.log(definition(res.data));
+        })
+        .catch(err=> {
+            console.log("Sorry Word not found in dictionary")
+        })
+    apirequest('relatedWords',word)
+        .then(res =>{
+            if(res.data.length > 1) {
+                console.log(`The synonyms for ${word} are`)
+                console.log(JSON.stringify(res.data[1].words));
+            } else {
+                console.log(`The synonyms for ${word} are`)
+                console.log(JSON.stringify(res.data[0].words))
+            }
+        })
+        .catch(err=> {
+            console.log("Sorry Word not found in dictionary")
+        })
+        apirequest('relatedWords',word)
+            .then(res =>{
+                if(res.data.length > 1) {
+                    console.log(`The antonyms for ${word} are`)
+                    console.log(JSON.stringify(res.data[0].words));
+                } else {
+                    console.log("Sorry We cannot find Antonym for the word in dictionary")
+                }
+            })
+            .catch(err=> {
+                console.log("Sorry Word not found in dictionary")
+            })
+
+            apirequest('examples',word)
+            .then(res =>{
+                console.log(`The examples for the word ${word} are`)
+                console.log(definition(res.data.examples))
+            })
+            .catch(err=> {
+                console.log("Sorry Word not found in dictionary")
+            })
+}
 
 
 let definition=(def) => {
@@ -93,6 +138,17 @@ switch(args[2]) {
             })
         break;
     case 'dict':
-        All(arg[3]);
+        All(args[3]);
         break;
-    case 'play':
+    case undefined:
+        axios.get(env.host+'words/randomWord?api_key='+env.api_key)
+            .then(res =>{
+                All(res.data.word)
+            })
+            .catch(err=> {
+                console.log("Sorry Word not found in dictionary")
+            })
+        break;
+    default:
+        All(args[2])
+}
