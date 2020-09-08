@@ -17,6 +17,20 @@ const apiReqAsync = (key, word) => {
         })
 }
 
+const nextpermutations= (word) => {
+    if (word.length < 2) 
+        return word;
+    let permutations = [];
+    for (let i=0; i<word.length; i++) {
+        let char = word[i];
+        if (word.indexOf(char) != i)
+            continue;
+        const remainingString = word.slice(0,i) + word.slice(i+1, word.length);
+        for (let subPermutation of nextpermutations(remainingString))
+            permutations.push(char + subPermutation)
+    }
+    return permutations;
+
 
 let definition=(def) => {
     let arr=[];
