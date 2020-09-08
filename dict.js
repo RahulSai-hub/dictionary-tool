@@ -5,6 +5,17 @@ const args=process.argv;
 const apirequest=(key, word) => {
     return axios.get(env.host+'word/'+word+`/${key}?api_key=`+env.api_key);
 }
+const apiReqAsync = (key, word) => {
+    return new Promise((resolve, reject) => {
+        axios.get(env.host+'word/'+word+`/${key}?api_key=`+env.api_key)
+            .then(data=> {
+                resolve(data)
+            })
+            .catch(err => {
+                reject(err);
+            })
+        })
+}
 
 
 let definition=(def) => {
