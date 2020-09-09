@@ -144,10 +144,10 @@ switch(args[2]) {
             .then(res =>{
                 const word = res.data.word;
                 let allPermut = [];
-                let permutations = nextPermut(word);
+                let permutations = nextPermutations(word);
                 for (permutation of permutations)
                     allPermut.push(permutation);
-                apiReq('definitions', word)
+                apiRequest('definitions', word)
                     .then(async res =>{
                         const def = res.data;
                         let wordDefIndex = 0;
@@ -161,16 +161,16 @@ switch(args[2]) {
                             synonyms = relatedWords.data[0].words;
                         }
                         let synonymIndex = 0, antonymIndex = 0;
-                        let inputword = await input("Can You guess this word? \n")
+                        let inputword = await input("Can You guess the word? \n")
                         if(inputword === word) {
-                            console.log("Good Job"); 
+                            console.log("Great"); 
                         } else {
                             let flag = 0;
                             while(true) {
                                 if(flag === 1) {
                                     break;
                                 } else {
-                                    console.log("Enter 1 to try again, 2 for hint, 3 to quit");     
+                                    console.log("Enter 1 to try again, 2 for hint, 3 to give answer and be ready for next question");     
     case undefined:
         axios.get(env.host+'words/randomWord?api_key='+env.api_key)
             .then(res =>{
