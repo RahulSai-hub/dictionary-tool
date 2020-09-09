@@ -165,7 +165,7 @@ switch(args[2]) {
                         if(inputword === word) {
                             console.log("Great"); 
                         } else {
-                            let flag = 0;
+                            let flag = 1;
                             while(true) {
                                 if(flag === 1) {
                                     break;
