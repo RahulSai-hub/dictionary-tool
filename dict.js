@@ -132,7 +132,14 @@ switch(args[2]) {
     case 'dict':
         All(args[3]);
         break;
-     
+    case 'play':
+        const readlineInterface = readline.createInterface(process.stdin, process.stdout);
+    
+        const input = (questionText) => {
+            return new Promise((resolve, reject) => {
+            readlineInterface.question(questionText, resolve);
+            });
+        } 
     case undefined:
         axios.get(env.host+'words/randomWord?api_key='+env.api_key)
             .then(res =>{
