@@ -250,18 +250,30 @@ switch(args[2]) {
                                             //console.log("enter the answer to get full datials for that answer");
                                             //const args1=process.argv[rightanswer];
                                             //console.log(args1);
-                                            switch('def' || 'syn' || 'ant' || 'ex' || 'dict') {
-                                                case 'def':
-                                                    apiReq('definitions',args[3])
-                                                        .then(res =>{
-                                                            console.log(`The definitions for the word ${args[3]} are`)
-                                                            console.log(definitionArray(res.data));
-                                                        })
-                                                        .catch(err=> {
-                                                            console.log("The word you entered was not found in dictionary")
-                                                        })
-                                                        console.log(args[3]);
-                                                    break;
+                                            prompt.start();
+                                            prompt.get(['keyword'],function(err,result){
+                                                if(err){
+                                                    return onErr(err);
+                                                }
+                                                switch(result.keyword) {
+                                                    case 'def':
+                                                        apiReq('definitions',args[3])
+                                                            .then(res =>{
+                                                                console.log(`The definitions for the word ${args[3]} are`)
+                                                                console.log(definitionArray(res.data));
+                                                            })
+                                                            .catch(err=> {
+                                                                console.log("Sorry Word not found in dictionary")
+                                                            })
+                                                            console.log(args[3]);
+                                                        break;
+                                                    
+                                                }
+
+                                            });
+                                            function onErr(err){
+                                                console.log(err);
+                                                return 1;
                                             }
                                             //console.log("you quit");
                                             break;
