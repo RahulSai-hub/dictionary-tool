@@ -63,7 +63,8 @@ const All = (word) => {
             apiRequest('examples',word)
             .then(res =>{
                 console.log(`The examples of the word ${word} are`)
-                console.log(definition(res.data.examples))
+                //console.log(definition(res.data.examples))
+                console.log(definition(res.data.synonyms));
             })
             .catch(err=> {
                 console.log("The word you entered was not found in dictionary")
@@ -178,7 +179,7 @@ switch(args[2]) {
                                         case 1:
                                             console.log("Let's try again");
                                             inputword = await input("Enter Your Word again\n");
-                                            if(word === wordinput) {
+                                            if(word === inputword) {
                                                 console.log("Great Job Finally!!")
                                                 flag = 0;
                                             } else {
@@ -196,7 +197,7 @@ switch(args[2]) {
                                                     console.log(allPermut[randPermut]);
 
                                                     wordinput = await input("Enter the Word again\n");
-                                                    if(word === wordinput) {
+                                                    if(word === inputword) {
                                                         console.log("Great Job Finally!!")
                                                         flag = 1;
                                                     } else {
