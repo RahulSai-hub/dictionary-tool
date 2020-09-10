@@ -161,16 +161,48 @@ switch(args[2]) {
                             synonyms = relatedWords.data[0].words;
                         }
                         let synonymIndex = 0, antonymIndex = 0;
-                        let inputword = await input("Can You guess the word? \n")
+                        let inputword = await input("Can You guess the word ? \n")
                         if(inputword === word) {
                             console.log("Great"); 
                         } else {
                             let flag = 1;
                             while(true) {
-                                if(flag === 0) {
+                                if(flag === 1) {
                                     break;
                                 } else {
-                                    console.log("Enter 1 to try again, 2 for hint, 3 to give answer and be ready for next question");     
+                                    console.log("Enter 1 to try again, 2 for hint, 3 to share answer and be ready for next question");     
+                                    let choice = await input('');
+                                    let inputword;
+                                    choice = Number(choice);
+                                    switch(choice) {
+                                        case 1:
+                                            console.log("Let's try again");
+                                            inputword = await input("Enter Your Word again\n");
+                                            if(word === wordinput) {
+                                                console.log("Great Job Finally!!")
+                                                flag = 0;
+                                            } else {
+                                                console.log(" Incorrect.")
+                                            }
+                                            break;
+                                        case 2: 
+                                            console.log("Lets see the hint");
+                                            let hint = (antonyms === undefined || antonyms[antonymIndex] === undefined)?Math.floor(Math.random()*3+1):Math.floor(Math.random()*4+1);
+                                            
+                                            switch(hint) {
+                                                case 1: 
+                                                    console.log("The Words are shuffled can you guess it correctly?");
+                                                    const randPermut = Math.floor(Math.random()*allPermut.length + 1);
+                                                    console.log(allPermut[randPermut]);
+
+                                                    wordinput = await input("Enter the Word again\n");
+                                                    if(word === wordinput) {
+                                                        console.log("Great Job Finally!!")
+                                                        flag = 1;
+                                                    } else {
+                                                        console.log("Incorrect.")
+                                                    }
+                                                    break;
     case undefined:
         axios.get(env.host+'words/randomWord?api_key='+env.api_key)
             .then(res =>{
