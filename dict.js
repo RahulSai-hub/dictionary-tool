@@ -173,46 +173,124 @@ switch(args[2]) {
                                 } else {
                                     console.log("Enter 1 to try again, 2 for hint, 3 to share answer and be ready for next question");     
                                     let choice = await input('');
-                                    let inputword;
+                                    let wordinput;
                                     choice = Number(choice);
                                     switch(choice) {
                                         case 1:
                                             console.log("Let's try again");
-                                            inputword = await input("Enter Your Word again\n");
-                                            if(word === inputword) {
-                                                console.log("Great Job Finally!!")
-                                                flag = 0;
+                                            wordinput = await input("Enter Your Word again\n");
+                                            if(word === wordinput) {
+                                                console.log("Good Job Finally!!")
+                                                flag = 1;
                                             } else {
-                                                console.log(" Incorrect.")
+                                                console.log("That's incorrect.")
                                             }
                                             break;
                                         case 2: 
-                                            console.log("Lets see the hint");
+                                            console.log("Lets see what we have for hint");
                                             let hint = (antonyms === undefined || antonyms[antonymIndex] === undefined)?Math.floor(Math.random()*3+1):Math.floor(Math.random()*4+1);
                                             
                                             switch(hint) {
                                                 case 1: 
-                                                    console.log("The Words are shuffled can you guess it correctly?");
+                                                    console.log("The Words are Jumbled can you guess it right?");
                                                     const randPermut = Math.floor(Math.random()*allPermut.length + 1);
                                                     console.log(allPermut[randPermut]);
 
-                                                    wordinput = await input("Enter the Word again\n");
-                                                    if(word === inputword) {
+                                                    wordinput = await input("Enter Your Word again\n");
+                                                    if(word === wordinput) {
+                                                        console.log("Good Job Finally!!")
+                                                        flag = 1;
+                                                    } else {
+                                                        console.log("That's incorrect.")
+                                                    }
+                                                    break;
+                                                case 2: 
+                                                    console.log("Let's see if you can get the word from another definition of the word?");
+                                                    console.log(def[wordDefIndex++].text);
+                                                    wordinput = await input("Enter Your Word again\n");
+                                                    if(word === wordinput) {
+                                                        console.log("Good Job Finally!!")
+                                                        flag = 1;
+                                                    } else {
+                                                        console.log("That's incorrect.")
+                                                    }
+                                                    break;
+                                                case 4:
+                                                    console.log('Given are the antonyms of the word. Can you guess it now?')
+                                                    
+                                                    console.log(antonyms[antonymIndex++])
+                                                    wordinput = await input("Enter Your Word again\n");
+                                                    if(word === wordinput) {
+                                                        console.log("Good Job Finally!!")
+                                                        flag = 1;
+                                                    } else {
+                                                        console.log("That's incorrect.")
+                                                    }
+                                                    break;
+                                                case 3: 
+                                                    console.log('Given are the synonyms of the word. Can you guess it now?')
+                                                    
+                                                    console.log(synonyms[synonymIndex++])
+                                                    wordinput = await input("Enter Your Word again\n");
+                                                    if(word === wordinput) {
                                                         console.log("Great Job Finally!!")
                                                         flag = 1;
                                                     } else {
-                                                        console.log("Incorrect.")
-                                                    }
+                                                        console.log("That's incorrect.")
+                                                    }   
+                                                   break;
+                                            }
+                                            break;
+                                        case 3: 
+                                            flag  = 1;
+                                            
+                                            
+                                            console.log("Right answer is:"+word);  
+                                            let rightanswer=word;
+                                            //console.log("enter the answer to get full datials for that answer");
+                                            //const args1=process.argv[rightanswer];
+                                            //console.log(args1);
+                                            switch('def' || 'syn' || 'ant' || 'ex' || 'dict') {
+                                                case 'def':
+                                                    apiReq('definitions',args[3])
+                                                        .then(res =>{
+                                                            console.log(`The definitions for the word ${args[3]} are`)
+                                                            console.log(definitionArray(res.data));
+                                                        })
+                                                        .catch(err=> {
+                                                            console.log("The word you entered was not found in dictionary")
+                                                        })
+                                                        console.log(args[3]);
                                                     break;
-    case undefined:
+                                            }
+                                            //console.log("you quit");
+                                            break;
+                                    }
+                                }
+                            }
+                            
+                        }
+                        //process.exit();        
+                    })
+                    .catch(err=> {
+                        console.log("Sorry Word not found in dictionary")
+                    })
+            
+                
+            })
+            .catch(err => {
+                console.log("Sorry Word not found in dictionary")
+            })
+        break;
+case undefined:
         axios.get(env.host+'words/randomWord?api_key='+env.api_key)
             .then(res =>{
                 All(res.data.word)
             })
             .catch(err=> {
-                console.log("The word you entered was not found in dictionary")
+                console.log("Sorry Word not found in dictionary")
             })
         break;
-    default:
-        All(args[2])   
-}
+default:
+        All(args[2])
+}    
