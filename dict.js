@@ -167,7 +167,7 @@ switch(args[2]) {
                         } else {
                             let flag = 1;
                             while(true) {
-                                if(flag === 1) {
+                                if(flag === 0) {
                                     break;
                                 } else {
                                     console.log("Enter 1 to try again, 2 for hint, 3 to give answer and be ready for next question");     
