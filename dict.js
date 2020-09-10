@@ -63,8 +63,8 @@ const All = (word) => {
             apiRequest('examples',word)
             .then(res =>{
                 console.log(`The examples of the word ${word} are`)
-                //console.log(definition(res.data.examples))
-                console.log(definition(res.data.synonyms));
+                console.log(definition(res.data.examples))
+                //console.log(definition(res.data.synonyms));
             })
             .catch(err=> {
                 console.log("The word you entered was not found in dictionary")
