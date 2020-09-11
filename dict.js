@@ -6,6 +6,7 @@ const prompt=require('prompt');
 const env = require('./environmentvariables')
 
 const args = process.argv;
+let score=0;
 
 const apiRequest = (key, word) => {
     return axios.get(env.host+'word/'+word+`/${key}?api_key=`+env.api_key);
@@ -146,21 +147,7 @@ switch(args[2]) {
         All(args[3]);
         break;
     case 'play':
-        const rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout
-        });
-        
-        rl.question("value ? ", function(name) {
-                console.log(`${name},`);
-                for(i=0;i<name;i++){
-                    execute1();
-                }
-                rl.close();
-        });
-        function execute1(){
             const readlineInterface = readline.createInterface(process.stdin, process.stdout);
-    
             const input = (questionText) => {
                 return new Promise((resolve, reject) => {
                 readlineInterface.question(questionText, resolve);
@@ -190,7 +177,8 @@ switch(args[2]) {
                             let inputword = await input("Can You guess this word? \n")
                             if(inputword === word) {
                                 console.log("Good Job"); 
-                                flag1=1;
+                                score=score+10;
+                                console.log("current score is:"+score);
                                 //process.exit();
                             } else {
                                 let flag = 0;
@@ -198,7 +186,7 @@ switch(args[2]) {
                                     if(flag === 1) {
                                         break;
                                     } else {
-                                        console.log("Enter 1 to try again, 2 for hint, 3 to view answer and quit");
+                                        console.log("Enter 1 to try again, 2 for hint, 3 to view answer and 4 to quit");
                                         let choice = await input('');
                                         let wordinput;
                                         choice = Number(choice);
@@ -208,15 +196,17 @@ switch(args[2]) {
                                                 wordinput = await input("Enter Your Word again\n");
                                                 if(word === wordinput) {
                                                     console.log("Great Job Finally!!")
-                                                    flag = 1;
+                                                    flag=1;
                                                     //process.exit();
                                                 } else {
                                                     console.log("That's incorrect.")
-
+                                                            score=score-2;
+                                                            console.log("current score is:"+score);
                                                 }
                                                 break;
                                             case 2: 
                                                 console.log("Lets see what we have for hint");
+                                                score=score-3;
                                                 let hint = (antonyms === undefined || antonyms[antonymIndex] === undefined)?Math.floor(Math.random()*3+1):Math.floor(Math.random()*4+1);
                                                 
                                                 switch(hint) {
@@ -279,7 +269,10 @@ switch(args[2]) {
                                                 
                                                 
                                                 console.log("Right answer is:"+word);  
+                                                score=score-4;
+                                                console.log("current score is:"+score);
                                                 let rightanswer=word;
+                                                All(rightanswer);
                                                 //console.log("enter the answer to get full datials for that answer");
                                                 //const args1=process.argv[rightanswer];
                                                 //console.log(args1);
@@ -302,7 +295,7 @@ switch(args[2]) {
                                                             break;
                                                         
                                                     }
-
+    
                                                 });
                                                 function onErr(err){
                                                     console.log(err);
@@ -342,6 +335,7 @@ switch(args[2]) {
                                         }
                                     }
                                 }
+                                console.log("The final score is:"+score);
                               process.exit();  
                               //flag1=1;
                               //break;
@@ -355,8 +349,8 @@ switch(args[2]) {
                 .catch(err => {
                     console.log("Sorry Word not found in dictionary")
                 })
-            //break;
-        }
+            break;
+        
         //execute1();
         //process.exit();
         
@@ -383,6 +377,7 @@ switch(args[2]) {
                     console.log("Sorry Word not found in dictionary")
                 })
             break;
-    /*default:
-            All(args[2])*/
+    default:
+            All(args[2])
     }
+    
