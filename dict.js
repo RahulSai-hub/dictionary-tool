@@ -146,7 +146,19 @@ switch(args[2]) {
         All(args[3]);
         break;
     case 'play':
-        function execute(){
+        const rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout
+        });
+        
+        rl.question("value ? ", function(name) {
+                console.log(`${name},`);
+                for(i=0;i<name;i++){
+                    execute1();
+                }
+                rl.close();
+        });
+        function execute1(){
             const readlineInterface = readline.createInterface(process.stdin, process.stdout);
     
             const input = (questionText) => {
@@ -178,6 +190,7 @@ switch(args[2]) {
                             let inputword = await input("Can You guess this word? \n")
                             if(inputword === word) {
                                 console.log("Good Job"); 
+                                flag1=1;
                                 //process.exit();
                             } else {
                                 let flag = 0;
@@ -199,6 +212,7 @@ switch(args[2]) {
                                                     //process.exit();
                                                 } else {
                                                     console.log("That's incorrect.")
+
                                                 }
                                                 break;
                                             case 2: 
@@ -261,7 +275,7 @@ switch(args[2]) {
                                                 }
                                                 break;
                                             case 3: 
-                                                flag  = 1;
+                                                //flag  = 1;
                                                 
                                                 
                                                 console.log("Right answer is:"+word);  
@@ -319,27 +333,34 @@ switch(args[2]) {
     
                                                 });*/
                                                 
-                                                console.log("you quit");
+                                               // console.log("you quit");
+                                                break;
+                                            case 4:
+                                                flag=1;
+                                                console.log('quiting');
                                                 break;
                                         }
                                     }
                                 }
-                                
+                              process.exit();  
+                              //flag1=1;
+                              //break;
                             }
                             //process.exit();        
                         })
                         .catch(err=> {
                             console.log("Sorry Word not found in dictionary")
-                        })
-                
-                    
+                        })   
                 })
                 .catch(err => {
                     console.log("Sorry Word not found in dictionary")
                 })
             //break;
         }
-        prompt.start();
+        //execute1();
+        //process.exit();
+        
+      /*  prompt.start();
         prompt.get(['how many times do you want to play the game'],function(err,result){
             if(err){
                 return onErr(err);
@@ -352,7 +373,7 @@ switch(args[2]) {
             console.log(err);
             return 1;
         }
-        execute();
+        execute();*/
     case undefined:
             axios.get(env.host+'words/randomWord?api_key='+env.api_key)
                 .then(res =>{
@@ -362,6 +383,6 @@ switch(args[2]) {
                     console.log("Sorry Word not found in dictionary")
                 })
             break;
-    default:
-            All(args[2])
+    /*default:
+            All(args[2])*/
     }
