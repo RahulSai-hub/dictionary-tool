@@ -26,6 +26,8 @@ function printDefinitions(word) {
             if (promisedData.length >= 1) {
                 console.log('\nThe definitions for the word:' + word);
                 promisedData = JSON.parse(promisedData);
+
+                //console.log(promisedData);
                 for (var index in promisedData) {
                     console.log((parseInt(index) + 1) + '\t' + (promisedData[index].text));
                 }
@@ -54,9 +56,8 @@ var printSynonyms = (word) => {
         if (data.length == 1) {
             var words = data[0].words;
             console.log('\nThe synonyms for the word' + word);
-            for (var index in words) {
-                console.log((parseInt(index) + 1) + '\t' + words[index]);
-            }
+            console.log(words);
+           
         } else {
             console.log('\nThere are no SYNONYMS found for the word:' + word);
         }
@@ -75,9 +76,8 @@ var printAntonyms = (word) => {
         if (data.length == 2) {
             var words1 = data[0].words;
             console.log('\nThe ANTONYMS for the word:' + word);
-            for (var index in words1) {
-                console.log((parseInt(index) + 1) + '\t' + words1[index]);
-            }
+            console.log(words1);
+            
         } else {
             console.log('\nThere are no ANTONYMS found for the word :' + word);
         }
@@ -91,6 +91,7 @@ function examples(word) {
             console.log('\nThe EXAMPLES for the word:' + word);
             promisedData = JSON.parse(promisedData);
             promisedData = promisedData.examples;
+            
             for (var index in promisedData) {
                 console.log((parseInt(index) + 1) + '\t' + promisedData[index].text);
             }
