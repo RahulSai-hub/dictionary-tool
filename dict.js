@@ -177,6 +177,7 @@ switch(args[2]) {
                             let inputword = await input("Can You guess this word? \n")
                             if(inputword === word) {
                                 console.log("Good Job"); 
+                                process.exit();
                             } else {
                                 let flag = 0;
                                 while(true) {
@@ -194,6 +195,7 @@ switch(args[2]) {
                                                 if(word === wordinput) {
                                                     console.log("Great Job Finally!!")
                                                     flag = 1;
+                                                    process.exit();
                                                 } else {
                                                     console.log("That's incorrect.")
                                                 }
@@ -212,6 +214,7 @@ switch(args[2]) {
                                                         if(word === wordinput) {
                                                             console.log("Good Job Finally!!")
                                                             flag = 1;
+                                                            process.exit();
                                                         } else {
                                                             console.log("That's incorrect.")
                                                         }
@@ -223,6 +226,7 @@ switch(args[2]) {
                                                         if(word === wordinput) {
                                                             console.log("Good Job Finally!!")
                                                             flag = 1;
+                                                            process.exit();
                                                         } else {
                                                             console.log("That's incorrect.")
                                                         }
@@ -235,6 +239,7 @@ switch(args[2]) {
                                                         if(word === wordinput) {
                                                             console.log("Good Job Finally!!")
                                                             flag = 1;
+                                                            process.exit();
                                                         } else {
                                                             console.log("That's incorrect.")
                                                         }
@@ -247,6 +252,7 @@ switch(args[2]) {
                                                         if(word === wordinput) {
                                                             console.log("Good Job Finally!!")
                                                             flag = 1;
+                                                            process.exit();
                                                         } else {
                                                             console.log("That's incorrect.")
                                                         }   
@@ -287,7 +293,7 @@ switch(args[2]) {
                                                     console.log(err);
                                                     return 1;
                                                 }*/
-                                                const rl = readline.createInterface({
+                                                /*const rl = readline.createInterface({
                                                     input: process.stdin,
                                                     output: process.stdout
                                                 });
@@ -310,16 +316,16 @@ switch(args[2]) {
                                                             
                                                         }
     
-                                                });
+                                                });*/
                                                 
-                                                //console.log("you quit");
+                                                console.log("you quit");
                                                 break;
                                         }
                                     }
                                 }
                                 
                             }
-                            //process.exit();        
+                            process.exit();        
                         })
                         .catch(err=> {
                             console.log("Sorry Word not found in dictionary")
